@@ -121,6 +121,9 @@ class App:
                 while not self.stop_event.is_set():
                     if logger.step():
                         self.events.put(('text', logger.transcript.render()))
+                    if logger.renamed:
+                        logger.renamed = False
+                        self.events.put(('file', output.base.with_suffix('.txt')))
                     if logger.connected != connected:
                         connected = logger.connected
                         self.events.put(('status', 'Recording live captions. Transcript saves automatically as you go.'
@@ -157,6 +160,9 @@ class App:
                 kind, value = self.events.get_nowait()
                 if kind == 'text':
                     self.set_preview(value)
+                elif kind == 'file':
+                    self.last_file = value
+                    self.show_folder()
                 elif kind == 'status':
                     self.status.set(value)
                 elif kind == 'error':
