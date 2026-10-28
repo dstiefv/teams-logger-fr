@@ -40,6 +40,10 @@ class App:
         self.last_file = None
 
         root.title('Teams Caption Logger')
+        # Bundled next to the code by PyInstaller (--add-data); beside the script otherwise.
+        icon = Path(getattr(sys, '_MEIPASS', Path(__file__).parent)) / 'teams_caption_icon.ico'
+        if icon.exists():
+            root.iconbitmap(default=str(icon))  # default= also covers message boxes and dialogs
         root.geometry('720x480')
         root.minsize(480, 300)
         top = ttk.Frame(root, padding=(12, 12, 12, 4))
